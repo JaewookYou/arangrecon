@@ -26,6 +26,11 @@ options:
                         quiet mode
 ```
 
+# how to install
+```
+> python3 -m pip install -r requirements.txt
+```
+
 # Use Example
 
 ```

@@ -76,13 +76,15 @@ def parseArgs():
         prog = 'arangrecon',
         description = 'recon web service by input domain',
     )
-    parser.add_argument("-d", "--domain", required=True)
-    parser.add_argument("-s", "--screenshot", action='store_true')
-    parser.add_argument("-ds", "--dirsearch", action='store_true')
-    parser.add_argument("-o", "--output")
-    parser.add_argument("-oJ", "--output-json")
-    parser.add_argument("-q", "--quiet")
+    parser.add_argument("-d", "--domain", required=True, help="target domain")
+    parser.add_argument("-s", "--screenshot", action='store_true', help="take screenshot when opened port is assumed to HTTP(S)")
+    parser.add_argument("-ds", "--dirsearch", action='store_true', help="do dirsearch when opened port is assumed to HTTP(S)")
+    parser.add_argument("-o", "--output", help="save plain text result to given path")
+    parser.add_argument("-oJ", "--output-json", help="save json type result to given path")
+    parser.add_argument("-q", "--quiet", help="quiet mode")
     args = parser.parse_args()
+    print(args)
+    exit(1)
     if args.output != None and args.output_json != None:
         printlog("error", "[x] Please Select One Option with output(-o) or output_json(-oJ)")
     return args

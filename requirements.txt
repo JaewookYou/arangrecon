@@ -1,0 +1,15 @@
+arang==1.0
+chardet==5.1.0
+charset-normalizer==2.0.12
+chromedriver-autoinstaller==0.4.0
+dnspython==2.2.1
+idna==3.4
+loguru==0.6.0
+pyfiglet==0.8.post1
+PySocks==1.7.1
+requests==2.28.1
+selenium==4.7.2
+socks==0
+sortedcontainers==2.4.0
+urllib3==1.26.12
+xmltodict==0.13.0

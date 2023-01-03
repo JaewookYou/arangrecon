@@ -36,3 +36,8 @@ options:
 ```
 > python3 arangrecon.py -d arang.kr -oJ arang.kr_result.txt --screenshot --dirsearch
 ```
+- if use this options,
+1. subdomain find by "arang.kr"
+2. json output to "arang.kr_result.txt"
+3. take screenshot when exposure port is HTTP(S) service
+4. do dirsearch when exposure port is HTTP(S) service

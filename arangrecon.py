@@ -81,10 +81,10 @@ def parseArgs():
     parser.add_argument("-ds", "--dirsearch", action='store_true', help="do dirsearch when opened port is assumed to HTTP(S)")
     parser.add_argument("-o", "--output", help="save plain text result to given path")
     parser.add_argument("-oJ", "--output-json", help="save json type result to given path")
+    parser.add_argument("-f", "--filter", help="only scan matched filter text")
     parser.add_argument("-q", "--quiet", help="quiet mode")
     args = parser.parse_args()
-    print(args)
-    exit(1)
+    
     if args.output != None and args.output_json != None:
         printlog("error", "[x] Please Select One Option with output(-o) or output_json(-oJ)")
     return args
@@ -130,6 +130,9 @@ results = {}
 cnt = 0
 printlog("info",f"[+] do port scanning, if you should input sudo password, plz input sudo password")
 for url in domains:
+    if args.filter not in url:
+        printlog("info",f"[+] {args.filter} not in {url}.. pass")
+        continue
     try:
         result = ""
         ip = socket.gethostbyname(url)
@@ -243,7 +246,8 @@ for url in domains:
         
         printlog("error",traceback.format_exc())
 
-driver.quit()
+if driver:
+    driver.quit()
 
 if args.output != None or args.output_json != None:
     printlog("info","[+] write output to file")

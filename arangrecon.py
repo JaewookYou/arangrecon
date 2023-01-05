@@ -51,17 +51,17 @@ def verifySock(d, p):
         return False
 
 def setResultDirs(domain):
-    if not os.path.isdir("./results/"):
-        os.mkdir("./results/")
+    if not os.path.isdir(os.path.normpath("./results/")):
+        os.mkdir(os.path.normpath("./results/"))
     nt = datetime.datetime.now()
     basedir = f"{domain}_{str(nt).replace(' ','_')[:-7]}"
-    os.mkdir(f"./results/{basedir}/")
+    os.mkdir(os.path.normpath(f"./results/{basedir}/"))
     return basedir
 
 def getsubdomains(domain, basedir):
     printlog("info",f"[+] get subdomains of {domain}")
     try:
-        os.system(f"./subfinder/v2/subfinder -silent -o ./results/{basedir}/domains.txt -d {domain}")
+        os.system(os.path.normpath(f"./subfinder/v2/subfinder -silent -o ./results/{basedir}/domains.txt -d {domain}"))
     except:
         printlog("error","get subdomain error")
         return False
@@ -111,7 +111,7 @@ printAsciiArt("arang-RECON")
 args = parseArgs()
 basedir = setResultDirs(args.domain)
 if getsubdomains(args.domain, basedir):
-    with open(f"./results/{basedir}/domains.txt", "r") as f:
+    with open(os.path.normpath(f"./results/{basedir}/domains.txt", "r")) as f:
         domains = f.read().split("\n")
         if "" in domains:
             domains.remove("")
@@ -120,11 +120,11 @@ else:
     exit(1)
 
 if args.screenshot:    
-    os.mkdir(f"./results/{basedir}/screenshots/")
+    os.mkdir(os.path.normpath(f"./results/{basedir}/screenshots/"))
     crawler = Crawler()
 
 if args.dirsearch:
-    os.mkdir(f"./results/{basedir}/dirsearch/")
+    os.mkdir(os.path.normpath(f"./results/{basedir}/dirsearch/"))
 
 results = {}
 cnt = 0
@@ -137,8 +137,8 @@ for url in domains:
         result = ""
         ip = socket.gethostbyname(url)
         printlog("info",f"[+] {url} scanning start")
-        fname = f"./results/{basedir}/{url}_result.xml"
-        os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
+        fname = os.path.normpath(f"./results/{basedir}/{url}_result.xml")
+        os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}") # fix nmap path and command when host os is windows
         time.sleep(0.5)
         with open(fname,"r") as f:
             xmlfile = f.read()
@@ -235,7 +235,7 @@ for url in domains:
 
         os.remove(fname)
 
-        with open(f"./results/{basedir}/scan_result.txt", "a+") as f:
+        with open(os.path.normpath(f"./results/{basedir}/scan_result.txt"), "a+") as f:
             f.write(result+"\n----------------------------------\n")
     except KeyboardInterrupt:
         exit(1)

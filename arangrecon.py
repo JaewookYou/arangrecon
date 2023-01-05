@@ -111,7 +111,7 @@ printAsciiArt("arang-RECON")
 args = parseArgs()
 basedir = setResultDirs(args.domain)
 if getsubdomains(args.domain, basedir):
-    with open(os.path.normpath(f"./results/{basedir}/domains.txt", "r")) as f:
+    with open(os.path.normpath(f"./results/{basedir}/domains.txt"), "r") as f:
         domains = f.read().split("\n")
         if "" in domains:
             domains.remove("")
@@ -130,9 +130,10 @@ results = {}
 cnt = 0
 printlog("info",f"[+] do port scanning, if you should input sudo password, plz input sudo password")
 for url in domains:
-    if args.filter not in url:
-        printlog("info",f"[+] {args.filter} not in {url}.. pass")
-        continue
+    if args.filter != None:
+        if args.filter not in url:
+            printlog("info",f"[+] {args.filter} not in {url}.. pass")
+            continue
     try:
         result = ""
         ip = socket.gethostbyname(url)

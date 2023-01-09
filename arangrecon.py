@@ -7,6 +7,8 @@ from loguru import logger
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# you should set nmap path when your host is windows
+nmappath = ""
 
 def verifyHttp(u):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"}
@@ -54,14 +56,17 @@ def setResultDirs(domain):
     if not os.path.isdir(os.path.normpath("./results/")):
         os.mkdir(os.path.normpath("./results/"))
     nt = datetime.datetime.now()
-    basedir = f"{domain}_{str(nt).replace(' ','_')[:-7]}"
+    basedir = f"{domain}_{str(nt).replace(' ','_').replace(':','')[:-7]}"
     os.mkdir(os.path.normpath(f"./results/{basedir}/"))
     return basedir
 
 def getsubdomains(domain, basedir):
     printlog("info",f"[+] get subdomains of {domain}")
     try:
-        os.system(os.path.normpath(f"./subfinder/v2/subfinder -silent -o ./results/{basedir}/domains.txt -d {domain}"))
+        if os.name != 'nt':
+            os.system(os.path.normpath(f"./subfinder/v2/subfinder -silent -o ./results/{basedir}/domains.txt -d {domain}"))
+        elif os.name == 'nt':
+            os.system(os.path.normpath(f"./subfinder/v2/subfinder.exe -silent -o ./results/{basedir}/domains.txt -d {domain}"))
     except:
         printlog("error","get subdomain error")
         return False
@@ -139,7 +144,10 @@ for url in domains:
         ip = socket.gethostbyname(url)
         printlog("info",f"[+] {url} scanning start")
         fname = os.path.normpath(f"./results/{basedir}/{url}_result.xml")
-        os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}") # fix nmap path and command when host os is windows
+        if os.name != 'nt':
+            os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
+        elif os.name == 'nt':
+            os.system(f"{nmappath} -sS -v0 {ip} -oX {fname}")
         time.sleep(0.5)
         with open(fname,"r") as f:
             xmlfile = f.read()

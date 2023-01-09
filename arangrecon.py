@@ -37,9 +37,10 @@ def verifySock(d, p):
         sock.send(b"AAAA\n")
         r = sock.recv(4096)
         sock.close()
-        return r
-    except TimeoutError:
+        return r    
+    except (socket.timeout, TimeoutError):
         printlog("info",f"[+] {d}:{p} connected but timeout")
+        return f"[+] {d}:{p} connected but timeout"
         return False
     except ConnectionResetError:
         printlog("info",f"[+] {d}:{p} connection aborted")

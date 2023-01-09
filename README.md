@@ -44,11 +44,21 @@ options:
 ```
 > go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 ```
- * use arangrecon_win.py
+ * move subfinder binary(usually at `C:\Users\%USERNAME%\go\bin\subfinder.exe`) to `.\arangrecon\subfinder\v2\`
 
 ## install python libraries
 ```
 > python3 -m pip install -r requirements.txt
+```
+
+## [ONLY FOR WINDOWS] setting `nmappath` variable to use nmap
+```python
+...
+
+# you should set nmap path when your host is windows
+nmappath = "%your nmap binary path at here%"
+
+...
 ```
 
 # Use Example

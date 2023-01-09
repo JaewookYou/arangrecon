@@ -27,15 +27,25 @@ options:
 ```
 
 # how to install
+
 - when you clone git repository, you should give `--recurse-submodules` option
 ```
 > git clone --recurse-submodules https://github.com/jaewookyou/arangrecon
 ```
-- build subfinder
+
+- build subfinder(for linux/mac)
 ```
 > cd subfinder/v2
 > make
 ```
+- build subfinder(for install)
+ * you should download go for windows([install here](https://go.dev/dl/))
+ * install subfinder by `go install`
+```
+> go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+```
+ * use arangrecon_win.py
+
 - install python libraries
 ```
 > python3 -m pip install -r requirements.txt

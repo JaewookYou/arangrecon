@@ -8,7 +8,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # you should set nmap path when your host is windows
-nmappath = ""
+nmappath = "nmap"
 
 def verifyHttp(u):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"}
@@ -132,6 +132,7 @@ if args.dirsearch:
     os.mkdir(os.path.normpath(f"./results/{basedir}/dirsearch/"))
 
 results = {}
+driver = None
 cnt = 0
 printlog("info",f"[+] do port scanning, if you should input sudo password, plz input sudo password")
 for url in domains:

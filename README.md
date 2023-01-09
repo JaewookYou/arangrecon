@@ -27,6 +27,16 @@ options:
 ```
 
 # how to install
+- when you clone git repository, you should give `--recurse-submodules` option
+```
+> git clone --recurse-submodules https://github.com/jaewookyou/arangrecon
+```
+- build subfinder
+```
+> cd subfinder/v2
+> make
+```
+- install python libraries
 ```
 > python3 -m pip install -r requirements.txt
 ```

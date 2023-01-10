@@ -8,7 +8,7 @@ recon with subdomain listing, port scanning, dirsearch
 \__,_/_/   \__,_/_/ /_/\__, /     /_/ |_/_____/\____/\____/_/ |_/   
                       /____/                                        
 
-usage: arangrecon [-h] -d DOMAIN [-s] [-ds] [-o OUTPUT] [-oJ OUTPUT_JSON] [-q QUIET]
+usage: arangrecon [-h] -d DOMAIN [-s] [-ds] [-o OUTPUT] [-oJ OUTPUT_JSON] [-f FILTER] [-p PASSIVE] [-q QUIET]
 
 recon web service by input domain
 
@@ -22,6 +22,10 @@ options:
                         save plain text result to given path
   -oJ OUTPUT_JSON, --output-json OUTPUT_JSON
                         save json type result to given path
+  -f FILTER, --filter FILTER
+                        only scan matched filter text
+  -p PASSIVE, --passive PASSIVE
+                        port scanning without subdomain listing, this argument get domain list file path
   -q QUIET, --quiet QUIET
                         quiet mode
 ```

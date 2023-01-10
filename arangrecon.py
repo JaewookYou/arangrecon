@@ -40,7 +40,7 @@ def verifySock(d, p):
         return r    
     except (socket.timeout, TimeoutError):
         printlog("info",f"[+] {d}:{p} connected but timeout")
-        return f"[+] {d}:{p} connected but timeout"
+        return (f"[+] {d}:{p} connected but timeout").encode()
         return False
     except ConnectionResetError:
         printlog("info",f"[+] {d}:{p} connection aborted")
@@ -88,7 +88,8 @@ def parseArgs():
     parser.add_argument("-o", "--output", help="save plain text result to given path")
     parser.add_argument("-oJ", "--output-json", help="save json type result to given path")
     parser.add_argument("-f", "--filter", help="only scan matched filter text")
-    parser.add_argument("-q", "--quiet", help="quiet mode")
+    parser.add_argument("-p", "--passive", help="port scanning without subdomain listing, this argument get domain list file path")
+    parser.add_argument("-q", "--quiet", help="quiet mode")    
     args = parser.parse_args()
     
     if args.output != None and args.output_json != None:
@@ -116,8 +117,14 @@ def printlog(logtype, text):
 printAsciiArt("arang-RECON")
 args = parseArgs()
 basedir = setResultDirs(args.domain)
-if getsubdomains(args.domain, basedir):
-    with open(os.path.normpath(f"./results/{basedir}/domains.txt"), "r") as f:
+if not args.passive:
+    if getsubdomains(args.domain, basedir):
+        with open(os.path.normpath(f"./results/{basedir}/domains.txt"), "r") as f:
+            domains = f.read().split("\n")
+            if "" in domains:
+                domains.remove("")
+elif args.passive != None:
+    with open(os.path.normpath(args.passive),"r") as f:
         domains = f.read().split("\n")
         if "" in domains:
             domains.remove("")

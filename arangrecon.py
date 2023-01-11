@@ -89,6 +89,7 @@ def parseArgs():
     parser.add_argument("-oJ", "--output-json", help="save json type result to given path")
     parser.add_argument("-f", "--filter", help="only scan matched filter text")
     parser.add_argument("-p", "--passive", help="port scanning without subdomain listing, this argument get domain list file path")
+    parser.add_argument("-fs", "--fullscan", help="full port scan(1-65535) not -sS option")
     parser.add_argument("-q", "--quiet", help="quiet mode")    
     args = parser.parse_args()
     
@@ -154,9 +155,15 @@ for url in domains:
         printlog("info",f"[+] {url} scanning start")
         fname = os.path.normpath(f"./results/{basedir}/{url}_result.xml")
         if os.name != 'nt':
-            os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
-        elif os.name == 'nt':
-            os.system(f"{nmappath} -sS -v0 {ip} -oX {fname}")
+            if args.fullscan != None:
+                os.system(f"sudo nmap -Pn -p 1-65535 -v0 {ip} -oX {fname}")
+            else:
+                os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
+        elif os.name == 'nt':            
+            if args.fullscan != None:
+                os.system(f"{nmappath} -Pn -p 1-65535 -v0 {ip} -oX {fname}")
+            else:
+                os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
         time.sleep(0.5)
         with open(fname,"r") as f:
             xmlfile = f.read()

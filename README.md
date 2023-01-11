@@ -8,7 +8,7 @@ recon with subdomain listing, port scanning, dirsearch
 \__,_/_/   \__,_/_/ /_/\__, /     /_/ |_/_____/\____/\____/_/ |_/   
                       /____/                                        
 
-usage: arangrecon [-h] -d DOMAIN [-s] [-ds] [-o OUTPUT] [-oJ OUTPUT_JSON] [-f FILTER] [-p PASSIVE] [-q QUIET]
+usage: arangrecon [-h] -d DOMAIN [-s] [-ds] [-o OUTPUT] [-oJ OUTPUT_JSON] [-f FILTER] [-p PASSIVE] [-fs FULLSCAN] [-q QUIET]
 
 recon web service by input domain
 
@@ -26,6 +26,8 @@ options:
                         only scan matched filter text
   -p PASSIVE, --passive PASSIVE
                         port scanning without subdomain listing, this argument get domain list file path
+  -fs FULLSCAN, --fullscan FULLSCAN
+                        full port scan(1-65535) not -sS option
   -q QUIET, --quiet QUIET
                         quiet mode
 ```
@@ -68,10 +70,11 @@ nmappath = "%your nmap binary path at here%"
 # Use Example
 
 ```
-> python3 arangrecon.py -d arang.kr -oJ arang.kr_result.txt --screenshot --dirsearch
+> python3 arangrecon.py -d arang.kr -oJ arang.kr_result.txt --screenshot --dirsearch -fs
 ```
 - if use this options,
 1. subdomain find by "arang.kr"
 2. json output to "arang.kr_result.txt"
-3. take screenshot when exposure port is HTTP(S) service
-4. do dirsearch when exposure port is HTTP(S) service
+3. nmap scan(with fullscan(-fs)) subdomains which is identified by subfinder
+4. take screenshot when exposure port is HTTP(S) service
+5. do dirsearch when exposure port is HTTP(S) service

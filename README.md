@@ -45,7 +45,7 @@ options:
 > make
 ```
 ### build subfinder(for windows)
- * you should download go for windows([install here](https://go.dev/dl/))
+ * you should download `go` for windows([install here](https://go.dev/dl/))
  * install subfinder by `go install`
 ```
 > go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest

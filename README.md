@@ -52,9 +52,14 @@ options:
 ```
  * move subfinder binary(usually at `C:\Users\%USERNAME%\go\bin\subfinder.exe`) to `.\arangrecon\subfinder\v2\`
 
-### install python libraries
+### install python libraries(linux / mac)
 ```
 > python3 -m pip install -r requirements.txt
+```
+
+### install python libraries(win)
+```
+> python3 -m pip install -r requirements_win.txt
 ```
 
 ### [ONLY FOR WINDOWS] setting `nmappath` variable to use nmap

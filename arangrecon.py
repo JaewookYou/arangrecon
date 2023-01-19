@@ -82,7 +82,7 @@ def parseArgs():
         prog = 'arangrecon',
         description = 'recon web service by input domain',
     )
-    parser.add_argument("-d", "--domain", required=True, help="target domain")
+    parser.add_argument("-d", "--domain", help="target domain")
     parser.add_argument("-s", "--screenshot", action='store_true', help="take screenshot when opened port is assumed to HTTP(S)")
     parser.add_argument("-ds", "--dirsearch", action='store_true', help="do dirsearch when opened port is assumed to HTTP(S)")
     parser.add_argument("-o", "--output", help="save plain text result to given path")
@@ -151,14 +151,19 @@ for url in domains:
             continue
     try:
         result = ""
-        ip = socket.gethostbyname(url)
+        if args.passive:
+            ip = url
+        else:
+            ip = socket.gethostbyname(url)
         printlog("info",f"[+] {url} scanning start")
-        fname = os.path.normpath(f"./results/{basedir}/{url}_result.xml")
+        fname = os.path.normpath(f"./results/{basedir}/{url.replace('/','_')}_result.xml")
         if os.name != 'nt':
             if args.fullscan != None:
                 os.system(f"sudo nmap -Pn -p 1-65535 -v0 {ip} -oX {fname}")
             else:
+                print((f"sudo nmap -sS -v0 {ip} -oX {fname}"))
                 os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
+                
         elif os.name == 'nt':            
             if args.fullscan != None:
                 os.system(f"{nmappath} -Pn -p 1-65535 -v0 {ip} -oX {fname}")

@@ -89,8 +89,9 @@ def parseArgs():
     parser.add_argument("-oJ", "--output-json", help="save json type result to given path")
     parser.add_argument("-f", "--filter", help="only scan matched filter text")
     parser.add_argument("-p", "--passive", help="port scanning without subdomain listing, this argument get domain list file path")
-    parser.add_argument("-fs", "--fullscan", help="full port scan(1-65535) not -sS option")
-    parser.add_argument("-q", "--quiet", help="quiet mode")    
+    parser.add_argument("-fs", "--fullscan", help="full port scan(1-65535)")
+    parser.add_argument("--ports", help="scan with given ports(file)")    
+    parser.add_argument("-q", "--quiet", help="quiet mode")        
     args = parser.parse_args()
     
     if args.output != None and args.output_json != None:
@@ -117,6 +118,11 @@ def printlog(logtype, text):
 
 printAsciiArt("arang-RECON")
 args = parseArgs()
+
+if args.domain == None and args.passive == None:
+    printlog("error", "[x] you didn't put any domain or domains")
+    exit(1)
+
 basedir = setResultDirs(args.domain)
 if not args.passive:
     if getsubdomains(args.domain, basedir):
@@ -132,6 +138,13 @@ elif args.passive != None:
 else:
     printlog("error",f"[x] subdomain finding failed")
     exit(1)
+
+if args.ports != None:
+    with open(os.path.normpath(args.ports),"r") as f:
+        givenports = f.read().split("\n")
+        if "" in domains:
+            domains.remove("")
+
 
 if args.screenshot:    
     os.mkdir(os.path.normpath(f"./results/{basedir}/screenshots/"))
@@ -159,16 +172,24 @@ for url in domains:
         fname = os.path.normpath(f"./results/{basedir}/{url.replace('/','_')}_result.xml")
         if os.name != 'nt':
             if args.fullscan != None:
-                os.system(f"sudo nmap -Pn -p 1-65535 -v0 {ip} -oX {fname}")
+                os.system(f"sudo nmap -sS -Pn -p 1-65535 -v0 {ip} -oX {fname}")
             else:
-                print((f"sudo nmap -sS -v0 {ip} -oX {fname}"))
-                os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
+                if givenports:
+                    portOption = ",".join(givenports)
+                    print(f"sudo nmap -sS -v0 {ip} -oX {fname} -Pn -p {portOption}")
+                    os.system(f"sudo nmap -sS -v0 {ip} -oX {fname} -Pn -p {portOption}")
+                else:
+                    os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
                 
         elif os.name == 'nt':            
             if args.fullscan != None:
-                os.system(f"{nmappath} -Pn -p 1-65535 -v0 {ip} -oX {fname}")
+                os.system(f"{nmappath} -sS -Pn -p 1-65535 -v0 {ip} -oX {fname}")
             else:
-                os.system(f"nmap -sS -v0 {ip} -oX {fname}")
+                if givenports:
+                    portOption = ",".join(givenports)
+                    os.system(f"nmap -sS -v0 {ip} -oX {fname} -Pn -p {portOption}")
+                else:
+                    os.system(f"nmap -sS -v0 {ip} -oX {fname}")
         time.sleep(0.5)
         with open(fname,"r") as f:
             xmlfile = f.read()

@@ -168,7 +168,7 @@ for url in domains:
             if args.fullscan != None:
                 os.system(f"{nmappath} -Pn -p 1-65535 -v0 {ip} -oX {fname}")
             else:
-                os.system(f"sudo nmap -sS -v0 {ip} -oX {fname}")
+                os.system(f"nmap -sS -v0 {ip} -oX {fname}")
         time.sleep(0.5)
         with open(fname,"r") as f:
             xmlfile = f.read()

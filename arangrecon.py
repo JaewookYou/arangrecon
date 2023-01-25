@@ -236,6 +236,8 @@ for url in domains:
                     if r.status_code == 200:
                         t = f"[+] {u} http requests success - (length : {len(r.content)})\n\n"
                         result += t
+                        if "Server" in r.headers:
+                            result += f"Server: {r.headers['Server']}\n"
                         printlog("success",t)
 
                         results[url]["port"][port['@portid']]["http"] = True
@@ -259,6 +261,8 @@ for url in domains:
                     if r.status_code == 200:
                         t = f"[+] {u} https requests success - (length : {len(r.content)})\n\n"
                         result += t
+                        if "Server" in r.headers:
+                            result += f"Server: {r.headers['Server']}\n"
                         printlog("success",t)
 
                         results[url]["port"][port['@portid']]["https"] = True
